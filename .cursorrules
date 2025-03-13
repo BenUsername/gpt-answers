@@ -1,0 +1,23 @@
+Project: WorkWithIsland Response Analysis
+
+Goal: Process CSV files containing questions and responses about acoustic pods/booths, enrich the data with brand mention analysis, and visualize the results in a web interface.
+
+Steps:
+1. Process CSV files with questions and responses about acoustic solutions
+2. Extract questions for specific countries (France)
+3. Generate responses using OpenAI's GPT-4o-mini model
+4. Enrich CSV data with brand mention analysis:
+   - Track when "workwithisland" is mentioned in responses
+   - Track when questions contain the brand name
+   - Add visibility indicators
+5. Create web visualization dashboard:
+   - Display statistics about brand mentions
+   - Filter and sort responses
+   - Highlight brand mentions
+   - Interactive table view
+
+Technologies:
+- Python (pandas, Flask)
+- OpenAI API
+- HTML/CSS/JavaScript with Bootstrap
+- CSV data processing 
