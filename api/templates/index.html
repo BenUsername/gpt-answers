@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkWithIsland Responses Analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .stats-card {
+            margin-bottom: 20px;
+        }
+        .response-text {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .highlight {
+            background-color: #ffff99;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-4">
+        <h1 class="mb-4">WorkWithIsland Responses Analysis</h1>
+        
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Questions</h5>
+                        <h2>{{ stats.total_questions }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Brand Mentioned</h5>
+                        <h2>{{ stats.brand_mentioned_count }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Visible in List</h5>
+                        <h2>{{ stats.visibule_count }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Branded Questions</h5>
+                        <h2>{{ stats.branded_count }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Filters</h5>
+                        <div class="btn-group" role="group" aria-label="Filter options">
+                            <input type="radio" class="btn-check" name="filter" id="showAll" autocomplete="off" checked>
+                            <label class="btn btn-outline-primary" for="showAll">Show All</label>
+                            
+                            <input type="radio" class="btn-check" name="filter" id="onlyBrandMentioned" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="onlyBrandMentioned">Only Brand Mentioned</label>
+                            
+                            <input type="radio" class="btn-check" name="filter" id="onlyBranded" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="onlyBranded">Only Branded Questions</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table of Responses -->
+        <div class="table-responsive">
+            <table class="table table-striped table-hover" id="responsesTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Question</th>
+                        <th>Response</th>
+                        <th>Brand Mentioned</th>
+                        <th>Visible</th>
+                        <th>Branded</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in data %}
+                    <tr class="response-row" 
+                        data-brand-mentioned="{{ item.brand_mentioned }}" 
+                        data-branded="{{ item.branded }}">
+                        <td>{{ item.prompt }}</td>
+                        <td class="response-text">{{ item.response }}</td>
+                        <td>{{ item.brand_mentioned }}</td>
+                        <td>{{ item.visibule }}</td>
+                        <td>{{ item.branded }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Filter functionality using radio buttons for mutually exclusive selection
+        document.getElementById('showAll').addEventListener('change', updateFilter);
+        document.getElementById('onlyBrandMentioned').addEventListener('change', updateFilter);
+        document.getElementById('onlyBranded').addEventListener('change', updateFilter);
+
+        function updateFilter() {
+            const showAll = document.getElementById('showAll').checked;
+            const onlyBrandMentioned = document.getElementById('onlyBrandMentioned').checked;
+            const onlyBranded = document.getElementById('onlyBranded').checked;
+            
+            const rows = document.querySelectorAll('#responsesTable tbody tr');
+            
+            rows.forEach(row => {
+                const brandMentioned = row.getAttribute('data-brand-mentioned');
+                const branded = row.getAttribute('data-branded');
+                
+                if (showAll) {
+                    row.style.display = '';
+                } else if (onlyBrandMentioned && brandMentioned === 'Yes') {
+                    row.style.display = '';
+                } else if (onlyBranded && branded === 'Yes') {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Highlight "workwithisland" in responses
+        document.addEventListener('DOMContentLoaded', function() {
+            const responses = document.querySelectorAll('.response-text');
+            
+            responses.forEach(response => {
+                const text = response.innerHTML;
+                const highlightedText = text.replace(/workwithisland/gi, '<span class="highlight">workwithisland</span>');
+                response.innerHTML = highlightedText;
+            });
+        });
+    </script>
+</body>
+</html> 

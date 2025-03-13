@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkWithIsland Responses Analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .stats-card {
+            margin-bottom: 20px;
+            cursor: help;
+        }
+        .response-text {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .highlight {
+            background-color: #ffff99;
+        }
+        .country-pill, .persona-pill {
+            cursor: pointer;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .country-pill.active, .persona-pill.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .nav-pills .nav-link.active {
+            background-color: #0d6efd;
+        }
+        .tab-pane {
+            padding-top: 20px;
+        }
+        .tooltip-inner {
+            max-width: 300px;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-4">
+        <h1 class="mb-4">WorkWithIsland Responses Analysis</h1>
+        
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-pills mb-4" id="analysisTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="france-tab" data-bs-toggle="pill" data-bs-target="#france" type="button" role="tab" aria-controls="france" aria-selected="true">Default</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="countries-tab" data-bs-toggle="pill" data-bs-target="#countries" type="button" role="tab" aria-controls="countries" aria-selected="false">Countries</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="personas-tab" data-bs-toggle="pill" data-bs-target="#personas" type="button" role="tab" aria-controls="personas" aria-selected="false">Personas</button>
+            </li>
+        </ul>
+        
+        <!-- Tab Content -->
+        <div class="tab-content" id="analysisTabsContent">
+            
+            <!-- France Only Tab -->
+            <div class="tab-pane fade show active" id="france" role="tabpanel" aria-labelledby="france-tab">
+                <!-- Stats Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card stats-card" data-bs-toggle="tooltip" data-bs-placement="top" title="Total number of analyzed questions">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Questions</h5>
+                                <h2 id="france-total-count">{{ stats_france.total_questions }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card" data-bs-toggle="tooltip" data-bs-placement="top" title="When 'workwithisland' is mentioned in the response">
+                            <div class="card-body">
+                                <h5 class="card-title">Brand Mentioned</h5>
+                                <h2 id="france-brand-mentioned-count">{{ stats_france.brand_mentioned_count }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card" data-bs-toggle="tooltip" data-bs-placement="top" title="When the client is visible in search results">
+                            <div class="card-body">
+                                <h5 class="card-title">Visible in List</h5>
+                                <h2 id="france-visibule-count">{{ stats_france.visibule_count }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card" data-bs-toggle="tooltip" data-bs-placement="top" title="When the question prompt contains the brand name">
+                            <div class="card-body">
+                                <h5 class="card-title">Branded Questions</h5>
+                                <h2 id="france-branded-count">{{ stats_france.branded_count }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Filter -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Content Filters</h5>
+                                <div class="btn-group" role="group" aria-label="Filter options">
+                                    <input type="radio" class="btn-check" name="france-filter" id="france-showAll" autocomplete="off" checked>
+                                    <label class="btn btn-outline-primary" for="france-showAll">Show All</label>
+                                    
+                                    <input type="radio" class="btn-check" name="france-filter" id="france-onlyBrandMentioned" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="france-onlyBrandMentioned">Only Brand Mentioned</label>
+                                    
+                                    <input type="radio" class="btn-check" name="france-filter" id="france-onlyBranded" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="france-onlyBranded">Only Branded Questions</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table of Responses for France -->
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="franceTable">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Question</th>
+                                <th>Response</th>
+                                <th>Brand Mentioned</th>
+                                <th>Visible</th>
+                                <th>Branded</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in data_france %}
+                            <tr class="france-row" 
+                                data-brand-mentioned="{{ item.brand_mentioned }}" 
+                                data-branded="{{ item.branded }}">
+                                <td>{{ item.prompt }}</td>
+                                <td class="response-text">{{ item.response }}</td>
+                                <td>{{ item.brand_mentioned }}</td>
+                                <td>{{ item.visibule }}</td>
+                                <td>{{ item.branded }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Countries Tab -->
+            <div class="tab-pane fade" id="countries" role="tabpanel" aria-labelledby="countries-tab">
+                <!-- Stats Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card stats-card" data-bs-toggle="tooltip" data-bs-placement="top" title="Total number of analyzed questions">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Questions</h5>
+                                <h2 id="countries-total-count">{{ stats_countries.total_questions }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card" data-bs-toggle="tooltip" data-bs-placement="top" title="When 'workwithisland' is mentioned in the response">
+                            <div class="card-body">
+                                <h5 class="card-title">Brand Mentioned</h5>
+                                <h2 id="countries-brand-mentioned-count">{{ stats_countries.brand_mentioned_count }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card" data-bs-toggle="tooltip" data-bs-placement="top" title="When the client is visible in search results">
+                            <div class="card-body">
+                                <h5 class="card-title">Visible in List</h5>
+                                <h2 id="countries-visibule-count">{{ stats_countries.visibule_count }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card" data-bs-toggle="tooltip" data-bs-placement="top" title="When the question prompt contains the brand name">
+                            <div class="card-body">
+                                <h5 class="card-title">Branded Questions</h5>
+                                <h2 id="countries-branded-count">{{ stats_countries.branded_count }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Country Filter -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Filter by Country</h5>
+                                <div class="d-flex flex-wrap" id="country-filters">
+                                    <span class="badge rounded-pill bg-primary country-pill active" data-country="all" data-bs-toggle="tooltip" data-bs-placement="top" title="Show all countries">All Countries</span>
+                                    {% for country in countries %}
+                                    <span class="badge rounded-pill bg-secondary country-pill" data-country="{{ country }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Filter to show only {{ country }} data">{{ country }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Filter -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Content Filters</h5>
+                                <div class="btn-group" role="group" aria-label="Filter options">
+                                    <input type="radio" class="btn-check" name="countries-filter" id="countries-showAll" autocomplete="off" checked>
+                                    <label class="btn btn-outline-primary" for="countries-showAll">Show All</label>
+                                    
+                                    <input type="radio" class="btn-check" name="countries-filter" id="countries-onlyBrandMentioned" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="countries-onlyBrandMentioned">Only Brand Mentioned</label>
+                                    
+                                    <input type="radio" class="btn-check" name="countries-filter" id="countries-onlyBranded" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="countries-onlyBranded">Only Branded Questions</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Country Stats -->
+                <div class="row mb-4" id="country-stats-container">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Country Statistics</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Country</th>
+                                                <th>Total Questions</th>
+                                                <th>Brand Mentioned</th>
+                                                <th>Visible</th>
+                                                <th>Branded</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for country, stats in country_stats.items() %}
+                                            <tr>
+                                                <td>{{ country }}</td>
+                                                <td>{{ stats.total }}</td>
+                                                <td>{{ stats.brand_mentioned }}</td>
+                                                <td>{{ stats.visibule }}</td>
+                                                <td>{{ stats.branded }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table of Responses for Countries -->
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="countriesTable">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Country</th>
+                                <th>Question</th>
+                                <th>Response</th>
+                                <th>Brand Mentioned</th>
+                                <th>Visible</th>
+                                <th>Branded</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in data_countries %}
+                            <tr class="countries-row" 
+                                data-country="{{ item.country }}"
+                                data-brand-mentioned="{{ item.brand_mentioned }}" 
+                                data-branded="{{ item.branded }}">
+                                <td>{{ item.country }}</td>
+                                <td>{{ item.prompt }}</td>
+                                <td class="response-text">{{ item.response }}</td>
+                                <td>{{ item.brand_mentioned }}</td>
+                                <td>{{ item.visibule }}</td>
+                                <td>{{ item.branded }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Personas Tab -->
+            <div class="tab-pane fade" id="personas" role="tabpanel" aria-labelledby="personas-tab">
+                <!-- Stats Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card stats-card" data-bs-toggle="tooltip" data-bs-placement="top" title="Total number of analyzed questions">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Questions</h5>
+                                <h2 id="personas-total-count">{{ stats_personas.total_questions }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card" data-bs-toggle="tooltip" data-bs-placement="top" title="When 'workwithisland' is mentioned in the response">
+                            <div class="card-body">
+                                <h5 class="card-title">Brand Mentioned</h5>
+                                <h2 id="personas-brand-mentioned-count">{{ stats_personas.brand_mentioned_count }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card" data-bs-toggle="tooltip" data-bs-placement="top" title="When the client is visible in search results">
+                            <div class="card-body">
+                                <h5 class="card-title">Visible in List</h5>
+                                <h2 id="personas-visibule-count">{{ stats_personas.visibule_count }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card" data-bs-toggle="tooltip" data-bs-placement="top" title="When the question prompt contains the brand name">
+                            <div class="card-body">
+                                <h5 class="card-title">Branded Questions</h5>
+                                <h2 id="personas-branded-count">{{ stats_personas.branded_count }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Persona Filter -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Filter by Persona</h5>
+                                <div class="d-flex flex-wrap" id="persona-filters">
+                                    <span class="badge rounded-pill bg-primary persona-pill active" data-persona="all" data-bs-toggle="tooltip" data-bs-placement="top" title="Show all personas">All Personas</span>
+                                    {% for persona in personas %}
+                                    <span class="badge rounded-pill bg-secondary persona-pill" data-persona="{{ persona }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Filter to show only {{ persona }} data">{{ persona }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Country Filter for Personas -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Filter by Country</h5>
+                                <div class="d-flex flex-wrap" id="persona-country-filters">
+                                    <span class="badge rounded-pill bg-primary persona-country-pill active" data-country="all" data-bs-toggle="tooltip" data-bs-placement="top" title="Show all countries">All Countries</span>
+                                    {% for country in countries %}
+                                    <span class="badge rounded-pill bg-secondary persona-country-pill" data-country="{{ country }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Filter to show only {{ country }} data">{{ country }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Filter -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Content Filters</h5>
+                                <div class="btn-group" role="group" aria-label="Filter options">
+                                    <input type="radio" class="btn-check" name="personas-filter" id="personas-showAll" autocomplete="off" checked>
+                                    <label class="btn btn-outline-primary" for="personas-showAll">Show All</label>
+                                    
+                                    <input type="radio" class="btn-check" name="personas-filter" id="personas-onlyBrandMentioned" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="personas-onlyBrandMentioned">Only Brand Mentioned</label>
+                                    
+                                    <input type="radio" class="btn-check" name="personas-filter" id="personas-onlyBranded" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="personas-onlyBranded">Only Branded Questions</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Persona Stats -->
+                <div class="row mb-4" id="persona-stats-container">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Persona Statistics</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Persona</th>
+                                                <th>Total Questions</th>
+                                                <th>Brand Mentioned</th>
+                                                <th>Visible</th>
+                                                <th>Branded</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for persona, stats in persona_stats.items() %}
+                                            <tr>
+                                                <td>{{ persona }}</td>
+                                                <td>{{ stats.total }}</td>
+                                                <td>{{ stats.brand_mentioned }}</td>
+                                                <td>{{ stats.visibule }}</td>
+                                                <td>{{ stats.branded }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table of Responses for Personas -->
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="personasTable">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Persona</th>
+                                <th>Country</th>
+                                <th>Question</th>
+                                <th>Response</th>
+                                <th>Brand Mentioned</th>
+                                <th>Visible</th>
+                                <th>Branded</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in data_personas %}
+                            <tr class="personas-row" 
+                                data-persona="{{ item.persona }}"
+                                data-country="{{ item.country }}"
+                                data-brand-mentioned="{{ item.brand_mentioned }}" 
+                                data-branded="{{ item.branded }}">
+                                <td>{{ item.persona }}</td>
+                                <td>{{ item.country }}</td>
+                                <td>{{ item.prompt }}</td>
+                                <td class="response-text">{{ item.response }}</td>
+                                <td>{{ item.brand_mentioned }}</td>
+                                <td>{{ item.visibule }}</td>
+                                <td>{{ item.branded }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // France tab filtering
+        document.getElementById('france-showAll').addEventListener('change', filterFranceRows);
+        document.getElementById('france-onlyBrandMentioned').addEventListener('change', filterFranceRows);
+        document.getElementById('france-onlyBranded').addEventListener('change', filterFranceRows);
+
+        function filterFranceRows() {
+            const showAll = document.getElementById('france-showAll').checked;
+            const onlyBrandMentioned = document.getElementById('france-onlyBrandMentioned').checked;
+            const onlyBranded = document.getElementById('france-onlyBranded').checked;
+            
+            const rows = document.querySelectorAll('#franceTable tbody tr');
+            
+            let visibleCount = 0;
+            let brandMentionedCount = 0;
+            let visibuleCount = 0;
+            let brandedCount = 0;
+            
+            rows.forEach(row => {
+                const brandMentioned = row.getAttribute('data-brand-mentioned');
+                const branded = row.getAttribute('data-branded');
+                
+                let contentMatch = false;
+                if (showAll) {
+                    contentMatch = true;
+                } else if (onlyBrandMentioned && brandMentioned === 'Yes') {
+                    contentMatch = true;
+                } else if (onlyBranded && branded === 'Yes') {
+                    contentMatch = true;
+                }
+                
+                if (contentMatch) {
+                    row.style.display = '';
+                    visibleCount++;
+                    
+                    if (brandMentioned === 'Yes') brandMentionedCount++;
+                    if (row.querySelector('td:nth-child(4)').textContent === 'Yes') visibuleCount++;
+                    if (branded === 'Yes') brandedCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Update stats
+            document.getElementById('france-total-count').textContent = visibleCount;
+            document.getElementById('france-brand-mentioned-count').textContent = brandMentionedCount;
+            document.getElementById('france-visibule-count').textContent = visibuleCount;
+            document.getElementById('france-branded-count').textContent = brandedCount;
+        }
+
+        // Country filtering
+        document.querySelectorAll('.country-pill').forEach(pill => {
+            pill.addEventListener('click', function() {
+                // Update active state
+                document.querySelectorAll('.country-pill').forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Filter rows
+                filterCountriesRows();
+            });
+        });
+
+        // Countries tab filtering
+        document.getElementById('countries-showAll').addEventListener('change', filterCountriesRows);
+        document.getElementById('countries-onlyBrandMentioned').addEventListener('change', filterCountriesRows);
+        document.getElementById('countries-onlyBranded').addEventListener('change', filterCountriesRows);
+
+        function filterCountriesRows() {
+            const selectedCountry = document.querySelector('.country-pill.active').getAttribute('data-country');
+            const showAll = document.getElementById('countries-showAll').checked;
+            const onlyBrandMentioned = document.getElementById('countries-onlyBrandMentioned').checked;
+            const onlyBranded = document.getElementById('countries-onlyBranded').checked;
+            
+            const rows = document.querySelectorAll('#countriesTable tbody tr');
+            
+            let visibleCount = 0;
+            let brandMentionedCount = 0;
+            let visibuleCount = 0;
+            let brandedCount = 0;
+            
+            rows.forEach(row => {
+                const rowCountry = row.getAttribute('data-country');
+                const brandMentioned = row.getAttribute('data-brand-mentioned');
+                const branded = row.getAttribute('data-branded');
+                
+                // Check country filter
+                const countryMatch = selectedCountry === 'all' || rowCountry === selectedCountry;
+                
+                // Check content filter
+                let contentMatch = false;
+                if (showAll) {
+                    contentMatch = true;
+                } else if (onlyBrandMentioned && brandMentioned === 'Yes') {
+                    contentMatch = true;
+                } else if (onlyBranded && branded === 'Yes') {
+                    contentMatch = true;
+                }
+                
+                // Apply filters
+                if (countryMatch && contentMatch) {
+                    row.style.display = '';
+                    visibleCount++;
+                    
+                    if (brandMentioned === 'Yes') brandMentionedCount++;
+                    if (row.querySelector('td:nth-child(5)').textContent === 'Yes') visibuleCount++;
+                    if (branded === 'Yes') brandedCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Update stats
+            document.getElementById('countries-total-count').textContent = visibleCount;
+            document.getElementById('countries-brand-mentioned-count').textContent = brandMentionedCount;
+            document.getElementById('countries-visibule-count').textContent = visibuleCount;
+            document.getElementById('countries-branded-count').textContent = brandedCount;
+        }
+        
+        // Persona filtering
+        document.querySelectorAll('.persona-pill').forEach(pill => {
+            pill.addEventListener('click', function() {
+                // Update active state
+                document.querySelectorAll('.persona-pill').forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Filter rows
+                filterPersonasRows();
+            });
+        });
+
+        // Persona country filtering
+        document.querySelectorAll('.persona-country-pill').forEach(pill => {
+            pill.addEventListener('click', function() {
+                // Update active state
+                document.querySelectorAll('.persona-country-pill').forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Filter rows
+                filterPersonasRows();
+            });
+        });
+
+        // Personas tab filtering
+        document.getElementById('personas-showAll').addEventListener('change', filterPersonasRows);
+        document.getElementById('personas-onlyBrandMentioned').addEventListener('change', filterPersonasRows);
+        document.getElementById('personas-onlyBranded').addEventListener('change', filterPersonasRows);
+
+        function filterPersonasRows() {
+            const selectedPersona = document.querySelector('.persona-pill.active').getAttribute('data-persona');
+            const selectedCountry = document.querySelector('.persona-country-pill.active').getAttribute('data-country');
+            const showAll = document.getElementById('personas-showAll').checked;
+            const onlyBrandMentioned = document.getElementById('personas-onlyBrandMentioned').checked;
+            const onlyBranded = document.getElementById('personas-onlyBranded').checked;
+            
+            const rows = document.querySelectorAll('#personasTable tbody tr');
+            
+            let visibleCount = 0;
+            let brandMentionedCount = 0;
+            let visibuleCount = 0;
+            let brandedCount = 0;
+            
+            rows.forEach(row => {
+                const rowPersona = row.getAttribute('data-persona');
+                const rowCountry = row.getAttribute('data-country');
+                const brandMentioned = row.getAttribute('data-brand-mentioned');
+                const branded = row.getAttribute('data-branded');
+                
+                // Check persona filter
+                const personaMatch = selectedPersona === 'all' || rowPersona === selectedPersona;
+                
+                // Check country filter
+                const countryMatch = selectedCountry === 'all' || rowCountry === selectedCountry;
+                
+                // Check content filter
+                let contentMatch = false;
+                if (showAll) {
+                    contentMatch = true;
+                } else if (onlyBrandMentioned && brandMentioned === 'Yes') {
+                    contentMatch = true;
+                } else if (onlyBranded && branded === 'Yes') {
+                    contentMatch = true;
+                }
+                
+                // Apply filters
+                if (personaMatch && countryMatch && contentMatch) {
+                    row.style.display = '';
+                    visibleCount++;
+                    
+                    if (brandMentioned === 'Yes') brandMentionedCount++;
+                    if (row.querySelector('td:nth-child(6)').textContent === 'Yes') visibuleCount++;
+                    if (branded === 'Yes') brandedCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Update stats
+            document.getElementById('personas-total-count').textContent = visibleCount;
+            document.getElementById('personas-brand-mentioned-count').textContent = brandMentionedCount;
+            document.getElementById('personas-visibule-count').textContent = visibuleCount;
+            document.getElementById('personas-branded-count').textContent = brandedCount;
+        }
+
+        // Highlight "workwithisland" in responses
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+            
+            // Highlight brand mentions
+            const responses = document.querySelectorAll('.response-text');
+            
+            responses.forEach(response => {
+                const text = response.innerHTML;
+                const highlightedText = text.replace(/workwithisland/gi, '<span class="highlight">workwithisland</span>');
+                response.innerHTML = highlightedText;
+            });
+        });
+    </script>
+</body>
+</html> 
