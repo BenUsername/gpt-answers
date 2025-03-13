@@ -1,5 +1,6 @@
-from flask import Flask, jsonify, Response
+from flask import Flask, Response, jsonify
 from data import get_data
+import json
 
 app = Flask(__name__)
 
@@ -13,8 +14,8 @@ HTML_TEMPLATE = """
     <title>WorkWithIsland Analysis</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .card { margin-bottom: 20px; }
-        .brand-mention { background-color: #e7f3fe; padding: 0 3px; border-radius: 3px; }
+        .card {{ margin-bottom: 20px; }}
+        .brand-mention {{ background-color: #e7f3fe; padding: 0 3px; border-radius: 3px; }}
     </style>
 </head>
 <body>
@@ -193,13 +194,8 @@ HTML_TEMPLATE = """
 </html>
 """
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
-    if path.startswith('api/'):
-        return handle_api(path[4:])
-    
-    # Get data for the dashboard
+def generate_html():
+    """Generate the HTML for the dashboard"""
     france_data, countries_data, personas_data = get_data()
     
     # Get unique countries and personas
@@ -258,26 +254,50 @@ def catch_all(path):
         persona_badges=persona_badges
     )
     
-    # Return HTML response
-    return Response(html, mimetype='text/html')
+    return html
 
-def handle_api(path):
+def handle_api_request(path):
     """Handle API requests"""
     france_data, countries_data, personas_data = get_data()
     
     if path == 'france':
-        return jsonify(france_data)
+        return {'data': france_data}
     elif path == 'countries':
-        return jsonify(countries_data)
+        return {'data': countries_data}
     elif path == 'personas':
-        return jsonify(personas_data)
+        return {'data': personas_data}
     else:
-        return jsonify({
+        return {
             'error': 'Invalid API endpoint',
             'available_endpoints': ['/api/france', '/api/countries', '/api/personas']
-        }), 404
+        }
 
-# This is the handler Vercel needs
+# This is the handler function for Vercel serverless
 def handler(request, context):
-    """Vercel serverless function handler"""
-    return app 
+    path = request.get('path', '')
+    
+    # Handle API requests
+    if path.startswith('/api/'):
+        api_path = path[5:]  # Remove '/api/'
+        result = handle_api_request(api_path)
+        
+        # Return JSON response
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json'
+            },
+            'body': json.dumps(result)
+        }
+    
+    # For all other paths, return the HTML dashboard
+    html = generate_html()
+    
+    # Return HTML response
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'text/html'
+        },
+        'body': html
+    } 
