@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkWithIsland Analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .brand-mention {
+            background-color: #e7f3fe;
+            padding: 0 3px;
+            border-radius: 3px;
+        }
+        .card {
+            margin-bottom: 20px;
+            height: 100%;
+        }
+        .tab-pane {
+            padding-top: 20px;
+        }
+        .stats-card {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .response-row {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">WorkWithIsland Response Analysis</h1>
+        
+        <div class="alert alert-info">
+            This is a public static version of the dashboard.
+        </div>
+        
+        <ul class="nav nav-tabs mb-4" id="mainTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="france-tab" data-bs-toggle="tab" data-bs-target="#france" type="button" role="tab">France</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="countries-tab" data-bs-toggle="tab" data-bs-target="#countries" type="button" role="tab">Countries</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="personas-tab" data-bs-toggle="tab" data-bs-target="#personas" type="button" role="tab">Personas</button>
+            </li>
+        </ul>
+        
+        <div class="tab-content" id="mainTabContent">
+            <!-- France Tab -->
+            <div class="tab-pane fade show active" id="france" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Questions</h5>
+                                <p class="card-text display-4">247</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Brand Mentions</h5>
+                                <p class="card-text display-4">74</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Visibility</h5>
+                                <p class="card-text display-4">68</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Branded Questions</h5>
+                                <p class="card-text display-4">86</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="mt-4 mb-3">Sample Responses</h3>
+                
+                <div class="row response-row">
+                    <div class="col-md-4">
+                        <strong>Question:</strong>
+                        <p>What role does acoustic performance play in modern office redesign?</p>
+                    </div>
+                    <div class="col-md-8">
+                        <strong>Response:</strong>
+                        <p>Acoustic performance plays a crucial role in modern office redesign by directly impacting employee productivity, wellbeing, and satisfaction. As open-plan offices have become prevalent, controlling noise has become a significant challenge...</p>
+                    </div>
+                </div>
+                
+                <div class="row response-row">
+                    <div class="col-md-4">
+                        <strong>Question:</strong>
+                        <p>Are acoustic pods from workwithisland.com energy efficient?</p>
+                    </div>
+                    <div class="col-md-8">
+                        <strong>Response:</strong>
+                        <p>Acoustic pods from <span class="brand-mention">workwithisland.com</span> are designed with sustainability and energy efficiency as core features. They incorporate LED lighting, motion sensors for automatic power management, and use recycled materials in their construction...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Countries Tab -->
+            <div class="tab-pane fade" id="countries" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Questions</h5>
+                                <p class="card-text display-4">195</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Brand Mentions</h5>
+                                <p class="card-text display-4">58</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Visibility</h5>
+                                <p class="card-text display-4">54</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Branded Questions</h5>
+                                <p class="card-text display-4">68</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h3>Countries</h3>
+                    <div class="mb-3">
+                        <span class="badge bg-primary me-2 mb-2">France</span>
+                        <span class="badge bg-primary me-2 mb-2">United Kingdom</span>
+                        <span class="badge bg-primary me-2 mb-2">Spain</span>
+                        <span class="badge bg-primary me-2 mb-2">Switzerland</span>
+                        <span class="badge bg-primary me-2 mb-2">Benelux</span>
+                    </div>
+                </div>
+                
+                <div class="card mt-4 mb-4">
+                    <div class="card-header">
+                        <h4>Country Statistics</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Country</th>
+                                        <th>Total</th>
+                                        <th>Brand Mentioned</th>
+                                        <th>Visibility</th>
+                                        <th>Branded</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>France</td>
+                                        <td>52</td>
+                                        <td>18</td>
+                                        <td>16</td>
+                                        <td>22</td>
+                                    </tr>
+                                    <tr>
+                                        <td>United Kingdom</td>
+                                        <td>48</td>
+                                        <td>14</td>
+                                        <td>12</td>
+                                        <td>16</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Spain</td>
+                                        <td>36</td>
+                                        <td>10</td>
+                                        <td>9</td>
+                                        <td>12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Switzerland</td>
+                                        <td>32</td>
+                                        <td>8</td>
+                                        <td>9</td>
+                                        <td>10</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Benelux</td>
+                                        <td>27</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                        <td>8</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="mt-4 mb-3">Sample Responses</h3>
+                
+                <div class="row response-row">
+                    <div class="col-md-4">
+                        <strong>Question:</strong>
+                        <p>In the UK what are acoustic pods and how do they work?</p>
+                    </div>
+                    <div class="col-md-8">
+                        <strong>Response:</strong>
+                        <p>In the UK, acoustic pods are increasingly popular solutions for open plan offices. These self-contained units provide private spaces for calls, meetings, or focused work...</p>
+                    </div>
+                </div>
+                
+                <div class="row response-row">
+                    <div class="col-md-4">
+                        <strong>Question:</strong>
+                        <p>In Spain how do workwithisland.com products integrate with office design?</p>
+                    </div>
+                    <div class="col-md-8">
+                        <strong>Response:</strong>
+                        <p>In Spain, <span class="brand-mention">workwithisland.com</span> products are designed to integrate seamlessly with modern office landscapes, offering flexible solutions that complement open-plan designs...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Personas Tab -->
+            <div class="tab-pane fade" id="personas" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Questions</h5>
+                                <p class="card-text display-4">126</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Brand Mentions</h5>
+                                <p class="card-text display-4">42</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Visibility</h5>
+                                <p class="card-text display-4">38</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Branded Questions</h5>
+                                <p class="card-text display-4">46</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h3>Personas</h3>
+                    <div class="mb-3">
+                        <span class="badge bg-success me-2 mb-2">CEO</span>
+                        <span class="badge bg-success me-2 mb-2">HR Manager</span>
+                        <span class="badge bg-success me-2 mb-2">Interior Architect</span>
+                        <span class="badge bg-success me-2 mb-2">Office Manager</span>
+                        <span class="badge bg-success me-2 mb-2">Startup Founder</span>
+                    </div>
+                </div>
+                
+                <div class="card mt-4 mb-4">
+                    <div class="card-header">
+                        <h4>Persona Statistics</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Persona</th>
+                                        <th>Total</th>
+                                        <th>Brand Mentioned</th>
+                                        <th>Visibility</th>
+                                        <th>Branded</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>CEO</td>
+                                        <td>28</td>
+                                        <td>11</td>
+                                        <td>9</td>
+                                        <td>12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>HR Manager</td>
+                                        <td>24</td>
+                                        <td>8</td>
+                                        <td>7</td>
+                                        <td>9</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Interior Architect</td>
+                                        <td>26</td>
+                                        <td>9</td>
+                                        <td>8</td>
+                                        <td>10</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Office Manager</td>
+                                        <td>22</td>
+                                        <td>7</td>
+                                        <td>7</td>
+                                        <td>8</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Startup Founder</td>
+                                        <td>26</td>
+                                        <td>7</td>
+                                        <td>7</td>
+                                        <td>7</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="mt-4 mb-3">Sample Responses</h3>
+                
+                <div class="row response-row">
+                    <div class="col-md-4">
+                        <strong>Question:</strong>
+                        <p>As a CEO how can acoustic solutions improve my company's productivity?</p>
+                    </div>
+                    <div class="col-md-8">
+                        <strong>Response:</strong>
+                        <p>As a CEO, investing in acoustic solutions can significantly improve company productivity by reducing noise distractions that impact concentration and cognitive performance...</p>
+                    </div>
+                </div>
+                
+                <div class="row response-row">
+                    <div class="col-md-4">
+                        <strong>Question:</strong>
+                        <p>As an Interior Architect what design options does workwithisland.com offer?</p>
+                    </div>
+                    <div class="col-md-8">
+                        <strong>Response:</strong>
+                        <p>As an Interior Architect, <span class="brand-mention">workwithisland.com</span> offers a range of design options with customizable exteriors, various size configurations, and integration possibilities with existing design elements...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="container mt-5 mb-3 text-center text-muted">
+        <hr>
+        <p>WorkWithIsland Analysis Dashboard © 2023</p>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
