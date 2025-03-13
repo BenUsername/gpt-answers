@@ -257,8 +257,8 @@ def get_sample_data():
     return france_data, countries_data, personas_data
 
 def get_data():
-    """
-    For Vercel deployment, just return sample data
-    """
-    # In a serverless environment, we'll always use sample data
-    return get_sample_data() 
+    """Return empty data for testing the serverless function."""
+    france_data = []
+    countries_data = []
+    personas_data = []
+    return france_data, countries_data, personas_data 
